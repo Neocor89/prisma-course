@@ -1,11 +1,20 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
+//+ Represent All Data of DB
 
 generator client {
   provider = "prisma-client-js"
 }
 
+//: For validation command
+// npm prisma migrate dev --name init 
+//: migration prisma dev DB
 datasource db {
   provider = "mysql"
   url      = env("DATABASE_URL")
+}
+
+//: Define Schema and Add to DB
+
+model User {
+  id   Int    @id @default(autoincrement())
+  name String
 }
