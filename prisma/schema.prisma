@@ -1,5 +1,3 @@
-//+ Represent All Data of DB
-
 generator client {
   provider = "prisma-client-js"
 }

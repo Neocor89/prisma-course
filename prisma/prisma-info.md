@@ -4,8 +4,9 @@
 
 1. [General Info 🗞️](#general-info)
 2. [Installation 👨‍💻](#installation)
-3. [Start](#collaboration)
-4. [FAQs](#faqs)
+3. [Setup Prisma Database](#setup-prisma-database)
+4. [Start](#collaboration)
+5. [FAQs](#faqs)
 <!-- 2. [Technologies ](#technologies) -->
 
 <div style="margin-top: 30px;"></div>
@@ -26,6 +27,21 @@ Start the _MySQL_ server in _XAMPP_ by clicking the "Start" button next to "_MyS
 
 Create a _MySQL_ database using the `phpMyAdmin interface` provided by _XAMPP_. To access _phpMyAdmin_, open your web browser and go to :
 http://localhost/phpmyadmin/
+
+- Creating a ts.config.json file and add **Prisma recomendation** or use your ts config in your project configuration
+
+```Typescript
+{
+  //: Prisma Doc Recomentdation
+  "compilerOptions": {
+    "sourceMap": true,
+    "outDir": "dist",
+    "strict": true,
+    "lib": ["esnext"],
+    "esModuleInterop": true
+  }
+}
+```
 
 #
 
@@ -54,15 +70,48 @@ prisma --version
 
 This command should output the version of _Prisma_ installed on your system.
 
+<div style="margin-top: 30px;"></div>
+
+### **Setup Prisma Database**
+
+---
+
 Next, create a new Prisma project by running the following command in your terminal:
 
 ```Bash
 npx prisma init
 ```
 
-> This command will create a new Prisma project with a basic directory structure and a "schema.prisma" file that describes your database schema.
+> This command will create and initialize a new Prisma project with a basic directory structure and a "<span style="text-decoration: underline;">schema.prisma</span>" file that describes your **database schema**.
 
-#
+<div style="margin-top: 15px;"></div>
+
+> It is possible to specify directly the database you use with this command
+
+```Bash
+npx prisma init --datasource-provider <your-database>
+```
+
+This command initializes some files and uses the default database type
+
+```Typescript
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "<your-database>"
+  url      = env("DATABASE_URL")
+}
+```
+
+Then in the `.env file` replace the default information of the url by yours, depending on the type of database you want to use
+
+```Bash
+DATABASE_URL=<database>://<user>:@localhost:<port>/<name-database>
+```
+
+For more information check url connection in [Prisma documentation](https://www.prisma.io/docs/reference/database-reference/connection-urls)
 
 <div style="margin-top: 30px;"></div>
 
@@ -70,10 +119,24 @@ npx prisma init
 
 ---
 
-Finally, you can generate the Prisma client by running the following command in your terminal:
+<!--
+Update available 4.10.1 -> 4.11.0
+Run the following to update
+
+npm i --save-dev prisma@latest
+npm i @prisma/client@latest -->
+
+Finally, you can generate or regenerate the Prisma client by running the following command in your terminal:
 
 ```Bash
 npx prisma generate
+```
+
+To allow access to the Prisma client
+
+```Typescript
+import { PrismaClient } from '@prisma/client'
+const prisma = new PrismaClient()
 ```
 
 This command will generate the _Prisma_ client, which provides
@@ -93,7 +156,11 @@ npx prisma migrate dev --name init
 
 <!-- Create a new Prisma project using the command "npx prisma init" in a terminal. This command will generate a "prisma/schema.prisma" file that describes your database.
 
-Open the "prisma/schema.prisma" file in a text editor and edit the "datasource" section to include your MySQL database connection information. Here is an example of the configuration: -->
+Open the "prisma/schema.prisma" file in a text editor and edit the "datasource" section to include your MySQL database connection information. Here is an example of the configuration:
+: For validation command
+ npm prisma migrate dev --name init
+: migration prisma dev DB
+-->
 
 ```Bash
 Datasource "db": MySQL database "test" at "localhost:3306"
