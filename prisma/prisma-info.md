@@ -3,10 +3,10 @@
 ## Table of Contents
 
 1. [General Info 🗞️](#general-info)
-2. [Technologies 👨‍💻](#technologies)
-3. [Installation](#installation)
-4. [Collaboration](#collaboration)
-5. [FAQs](#faqs)
+2. [Installation 👨‍💻](#installation)
+3. [Start](#collaboration)
+4. [FAQs](#faqs)
+<!-- 2. [Technologies ](#technologies) -->
 
 <div style="margin-top: 30px;"></div>
 
@@ -18,19 +18,20 @@ What is **Prisma** :
 
 - [Prisma](https://www.prisma.io/) is ORM that helps developers read and write data to databases
 
----
-
 Before connect Prisma with `XAMPP` and a `MySQL database`, you can follow these steps:
 
-Make sure you have XAMPP installed on your computer. You can download it from the Apache Friends website.
+Make sure you have _XAMPP_ installed on your computer. You can download it from the Apache Friends website.
 
-Start the MySQL server in XAMPP by clicking the "Start" button next to "MySQL" in the XAMPP control window.
+Start the _MySQL_ server in _XAMPP_ by clicking the "Start" button next to "_MySQL_" in the _XAMPP_ control window.
 
-Create a MySQL database using the phpMyAdmin interface provided by XAMPP. To access phpMyAdmin, open your web browser and go to http://localhost/phpmyadmin/.
+Create a _MySQL_ database using the `phpMyAdmin interface` provided by _XAMPP_. To access _phpMyAdmin_, open your web browser and go to :
+http://localhost/phpmyadmin/
 
----
+#
 
-#### **Installation**
+<div style="margin-top: 30px;"></div>
+
+> ### **Installation**
 
 ---
 
@@ -60,6 +61,14 @@ npx prisma init
 ```
 
 > This command will create a new Prisma project with a basic directory structure and a "schema.prisma" file that describes your database schema.
+
+#
+
+<div style="margin-top: 30px;"></div>
+
+> ### **Start**
+
+---
 
 Finally, you can generate the Prisma client by running the following command in your terminal:
 
