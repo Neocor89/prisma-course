@@ -123,7 +123,6 @@ For more information check url connection in [Prisma documentation](https://www.
 Update available 4.10.1 -> 4.11.0
 Run the following to update
 
-npm i --save-dev prisma@latest
 npm i @prisma/client@latest -->
 
 Finally, you can generate or regenerate the Prisma client by running the following command in your terminal:
