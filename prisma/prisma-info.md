@@ -108,7 +108,7 @@ datasource db {
 Then in the `.env file` replace the default information of the url by yours, depending on the type of database you want to use
 
 ```Bash
-DATABASE_URL=<database>://<user>:@localhost:<port>/<name-database>
+DATABASE_URL="your-database://db-user:@localhost:db-port/name-of-database>"
 ```
 
 For more information check url connection in [Prisma documentation](https://www.prisma.io/docs/reference/database-reference/connection-urls)
@@ -118,6 +118,15 @@ For more information check url connection in [Prisma documentation](https://www.
 > ### **Start**
 
 ---
+
+```Typescript
+//: Define Schema
+
+model User {
+  id   Int    @id @default(autoincrement())
+  name String
+}
+```
 
 <!--
 Update available 4.10.1 -> 4.11.0
@@ -153,9 +162,10 @@ npx prisma migrate dev --name init
 
 #### **Data Migration into Database**
 
-<!-- Create a new Prisma project using the command "npx prisma init" in a terminal. This command will generate a "prisma/schema.prisma" file that describes your database.
+<!--
+: Create a new Prisma project using the command "npx prisma init" in a terminal. This command will generate a "prisma/schema.prisma" file that describes your database.
 
-Open the "prisma/schema.prisma" file in a text editor and edit the "datasource" section to include your MySQL database connection information. Here is an example of the configuration:
+: Open the "prisma/schema.prisma" file in a text editor and edit the "datasource" section to include your MySQL database connection information. Here is an example of the configuration:
 : For validation command
  npm prisma migrate dev --name init
 : migration prisma dev DB
