@@ -5,8 +5,9 @@
 1. [General Info 🗞️](#general-info)
 2. [Installation 👨‍💻](#installation)
 3. [Setup Prisma Database](#setup-prisma-database)
-4. [Start](#collaboration)
-5. [FAQs](#faqs)
+4. [Database Interaction](#database-interaction)
+5. [Schema Prisma](#schema-prisma)
+6. [FAQs](#faqs)
 <!-- 2. [Technologies ](#technologies) -->
 
 <div style="margin-top: 30px;"></div>
@@ -115,7 +116,7 @@ For more information check url connection in [Prisma documentation](https://www.
 
 <div style="margin-top: 30px;"></div>
 
-> ### **Start**
+> ### **Schema Prisma**
 
 ---
 
@@ -150,9 +151,107 @@ const prisma = new PrismaClient()
 This command will generate the _Prisma_ client, which provides
 a type-safe API for querying your `database`.
 
+<div style="margin-top: 30px;"></div>
+
+##### <p style="text-decoration: underline">**GOOD PRACTICE**</p>
+
+```Typescript
+//: Disconnect database after queries running
+.catch(e => {
+  console.error(e.message);
+})
+.finally(async () => {
+  await prisma.$disconnect()
+})
+```
+
 > That's it!
 
 You have now installed Prisma with npm and created a new Prisma project. You can now start using Prisma to interact with your `database`.
+
+<div style="margin-top: 30px;"></div>
+
+### **Database Interaction**
+
+#
+
+```Typescript
+  // Write Prisma Client Queries
+async function main() {
+
+  // Create Data for interact with Database
+  const user = await prisma.user.create({
+    data: {
+      name: "Bendevweb"
+    }
+  })
+  console.log(user);
+}
+
+main()
+
+//: Disconnect database
+.catch(e => {
+  console.error(e.message);
+})
+.finally(async () => {
+  await prisma.$disconnect()
+})
+```
+
+Creation of a script in the `package.json` file.
+
+```JSON
+"scripts": {
+    "devStart": "nodemon script.ts"
+  },
+```
+
+To automatically
+compile our **script.ts** file at each new modification.
+
+```Bash
+> prisma@1.0.0 devStart
+> nodemon script.ts
+
+[nodemon] 2.0.20
+[nodemon] to restart at any time, enter `rs`
+[nodemon] watching path(s): *.*
+[nodemon] watching extensions: ts,json
+[nodemon] starting `ts-node script.ts`
+{ id: 1, name: 'Bendevweb' }
+[nodemon] clean exit - waiting for changes before restart
+```
+
+There are several ways to retrieve `user` information from the _database_.
+
+```Typescript
+// Get all Users
+const users = await prisma.user.findMany()
+
+// Get first 10 Users
+const users = await prisma.user.findMany({ take: 10 })
+
+// Only select the `id`
+const userWithIdOnly = await prisma.user.findMany({ select: { id: true } })
+```
+
+<div style="margin-top: 20px;"></div>
+
+#### <p style="text-decoration: underline; font-weight: bold;">Result</p>
+
+```Typescript
+const users = await prisma.user.findMany()
+[
+  { id: 1, name: 'Bendevweb' },
+  { id: 2, name: 'Neocor89' }
+]
+```
+
+#### <p style="text-decoration: underline; font-weight: bold;">Operation</p>
+
+We create our schema with all the data we want.
+Once finished, we create our migrations that allow us to make changes to our database, once updated, a migration is automatically created, in order to move to the next step and allow the database to be always up to date.
 
 ```Bash
 npm install --save-dev prisma typescript ts-node @types/node nodemon
