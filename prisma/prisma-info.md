@@ -250,19 +250,61 @@ const users = await prisma.user.findMany()
 
 #### <p style="text-decoration: underline; font-weight: bold;">Operation</p>
 
+As _Prisma_ connects directly to the _database_ it is possible to have only one source that provides the data, which is the `provider`
+
+```Typescript
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+```
+
 We create our schema with all the data we want.
 Once finished, we create our migrations that allow us to make changes to our database, once updated, a migration is automatically created, in order to move to the next step and allow the database to be always up to date.
+
+#### <p style="text-decoration: underline; font-weight: bold;">Models</p>
+
+The **models** represent to the tables of your database and the fields inside these models represent the different **rows**.
+Each field is composed of 4 parts:
+
+- `Name`
+- `Type`
+- `Modifier` (Optional)
+- `Attribute` (Optional)
+
+```Typescript
+model User {
+  id Int  @id @default(autoincrement())
+  name String
+}
+
+model User {
+  Name Type  @attribute
+  Name optionalType?
+  posts Post[] // the [] It is a modifier and indicates that there can be multiple
+}
+```
+
+```Typescript
+Unsupported(_ name: String)
+```
+
+An arbitrary database column type, for which Prisma has no syntax.
+Fields of type Unsupported work with Prisma Migrate and introspection,
+but are not exposed in Prisma Client.
+
+Prisma allows you to convert an existing database and as it does not accept all types of data it will be recovered and listed as unsupported
+
+#### **Data Migration into Database**
+
+<!--
+: Create a new Prisma project using the command "npx prisma init" in a terminal. This command will generate a "prisma/schema.prisma" file that describes your database.
 
 ```Bash
 npm install --save-dev prisma typescript ts-node @types/node nodemon
 npx prisma init --datasource-provider mysql
 npx prisma migrate dev --name init
 ```
-
-#### **Data Migration into Database**
-
-<!--
-: Create a new Prisma project using the command "npx prisma init" in a terminal. This command will generate a "prisma/schema.prisma" file that describes your database.
 
 : Open the "prisma/schema.prisma" file in a text editor and edit the "datasource" section to include your MySQL database connection information. Here is an example of the configuration:
 : For validation command
