@@ -13,34 +13,22 @@ datasource db {
 //: Define Schema and Add to DB
 
 model User {
-  id          Int     @id @default(autoincrement())
-  name        String
-  email       String
-  isAdmin     Boolean
-  preferences Json?
-  posts       Post[]
+  id            String  @id @default(uuid())
+  name          String
+  email         String
+  isAdmin       Boolean
+  preferences   Json
+  writtenPosts  Post[]  @relation("WrittenPosts")
+  favoritePosts Post[]  @relation("FavoritePosts")
 }
 
 model Post {
-  id        String   @id @default(uuid())
-  rating    Float
-  createdAt DateTime
-  updatedAt DateTime
-  author    User     @relation(fields: [userId], references: [id])
-  userId    Int
+  id            String   @id @default(uuid())
+  rating        Float
+  createdAt     DateTime
+  updatedAt     DateTime
+  author        User     @relation("WrittenPosts", fields: [authorId], references: [id])
+  authorId      String
+  favoritedBy   User     @relation("FavoritePosts", fields: [favoritedById], references: [id])
+  favoritedById String
 }
-
-// @relation(_ name: String?, map: String?, fields: FieldReference[]?, references: FieldReference[]?)
-// Defines a connection between two models. Learn more.
-
-// @param name Defines the name of the relationship. In an m-n-relation, it also determines the name of the underlying relation table.
-
-// @param map Defines a custom name for the foreign key in the database.
-
-// @param fields A list of field references of the current model.
-
-// @param references A list of field references of the model on the other side of the relation.
-
-// @param onDelete Specifies the action to perform when a referenced entry in the referenced model is being deleted.
-
-// @param onUpdate Specifies the action to perform when a referenced field in the
