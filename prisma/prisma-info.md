@@ -330,7 +330,27 @@ model User {
 }
 ```
 
-#### **Data Migration into Database**
+```Typescript
+@relation(_ name: String?, map: String?, fields: FieldReference[]?, references: FieldReference[]?)
+```
+
+<div style="margin-top: 20px;"></div>
+
+#### <p style="text-decoration: underline; font-weight: bold;">Defines a connection between two models</p>
+
+- `name` Defines the name of the relationship. In an m-n-relation, it also determines the name of the underlying relation table.
+
+- `map` Defines a custom name for the foreign key in the database.
+
+- `fields` A list of field references of the current model.
+
+- `references` A list of field references of the model on the other side of the relation.
+
+- `onDelete` Specifies the action to perform when a referenced entry in the referenced model is being deleted.
+
+- `onUpdate` Specifies the action to perform when a referenced field in the
+
+<!-- #### **Data Migration into Database** -->
 
 <!--
 : Create a new Prisma project using the command "npx prisma init" in a terminal. This command will generate a "prisma/schema.prisma" file that describes your database.
@@ -347,7 +367,7 @@ npx prisma migrate dev --name init
 : migration prisma dev DB
 -->
 
-```Bash
+<!-- ```Bash
 Datasource "db": MySQL database "test" at "localhost:3306"
 
 Applying migration `20230302164110_init`
@@ -361,4 +381,4 @@ migrations/
 Your database is now in sync with your schema.
 
 Running generate... (Use --skip-generate to skip the generators)
-```
+``` -->
