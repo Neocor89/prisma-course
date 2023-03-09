@@ -268,7 +268,7 @@ The **models** represent to the tables of your database and the fields inside th
 Each field is composed of 4 parts:
 
 - `Name`
-- `Type`
+- `Type` (particular type)
 - `Modifier` (Optional)
 - `Attribute` (Optional)
 
@@ -285,15 +285,50 @@ model User {
 }
 ```
 
+> `Particular type` in Prisma :  
+> Prisma allows you to convert an existing database and as it does not accept all types of data it will be recovered and listed as **unsupported**.
+
 ```Typescript
 Unsupported(_ name: String)
 ```
 
-An arbitrary database column type, for which Prisma has no syntax.
-Fields of type Unsupported work with Prisma Migrate and introspection,
-but are not exposed in Prisma Client.
+<div style="margin-top: 20px;"></div>
 
-Prisma allows you to convert an existing database and as it does not accept all types of data it will be recovered and listed as unsupported
+#### <p style="text-decoration: underline; font-weight: bold;">Relation</p>
+
+There are `3` different types of relationships in Prsima :
+
+- `One to many`
+- `many to many`
+- `one to one`
+
+A _User_ can have **multiple** messages
+
+When you create a field that is linked to another model, for example the user model. You have to specify its relation to the X field in the model and its reference to the Y field of the linked model
+
+```Typescript
+model Post {
+  id        String   @id @default(uuid())
+  rating    Float
+  createdAt DateTime
+  updatedAt DateTime
+  // Definition of a one-to-many relation
+  author    User     @relation(fields: [userId], references: [id])
+  userId    Int
+}
+```
+
+```Typescript
+model User {
+  id          Int     @id @default(autoincrement())
+  name        String
+  email       String
+  isAdmin     Boolean
+  preferences Json?
+  // The syntax [] is a field type modifier
+  posts       Post[]
+}
+```
 
 #### **Data Migration into Database**
 
