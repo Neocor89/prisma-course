@@ -13,17 +13,20 @@ datasource db {
 //: Define Schema and Add to DB
 
 model User {
-  id            String  @id @default(uuid())
-  name          String
-  email         String
-  isAdmin       Boolean
-  writtenPosts  Post[]  @relation("WrittenPosts")
-  favoritePosts Post[]  @relation("FavoritePosts")
+  id             String          @id @default(uuid())
+  name           String
+  email          String
+  isAdmin        Boolean
+  writtenPosts   Post[]          @relation("WrittenPosts")
+  favoritePosts  Post[]          @relation("FavoritePosts")
+  UserPreference UserPreference?
 }
 
 model UserPreference {
   id           String  @id @default(uuid())
   emailUpdates Boolean
+  user         User    @relation(fields: [userId], references: [id])
+  userId       String  @unique
 }
 
 model Post {
