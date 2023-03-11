@@ -292,6 +292,15 @@ model User {
 Unsupported(_ name: String)
 ```
 
+```Typescript
+@id // Defines a single-field ID on the model
+```
+
+```Typescript
+ @default()
+// Defines a default value for this field.
+```
+
 <div style="margin-top: 20px;"></div>
 
 #### <p style="text-decoration: underline; font-weight: bold;">Relation</p>
@@ -349,6 +358,29 @@ model User {
 - `onDelete` Specifies the action to perform when a referenced entry in the referenced model is being deleted.
 
 - `onUpdate` Specifies the action to perform when a referenced field in the
+
+#### <p style="text-decoration: underline; font-weight: bold;">Personalization of relations between models</p>
+
+Creation of a relationship between two models
+
+```Typescript
+model Post {
+  id            String   @id @default(uuid())
+  author        User     @relation("WrittenPosts", fields: [authorId], references: [id])
+  authorId      String
+  favoritedBy   User     @relation("FavoritePosts", fields: [favoritedById], references: [id])
+  favoritedById String
+  // By assigning a type of model in another it must necessarily be linked
+  categories Category[]
+}
+
+
+model Category {
+  id String @id @default(uuid())
+  // Refers to this category model
+  posts Post[]
+}
+```
 
 <!-- #### **Data Migration into Database** -->
 
