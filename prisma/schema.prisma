@@ -17,9 +17,13 @@ model User {
   name          String
   email         String
   isAdmin       Boolean
-  preferences   Json
   writtenPosts  Post[]  @relation("WrittenPosts")
   favoritePosts Post[]  @relation("FavoritePosts")
+}
+
+model UserPreference {
+  id           String  @id @default(uuid())
+  emailUpdates Boolean
 }
 
 model Post {
