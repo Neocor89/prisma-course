@@ -292,13 +292,43 @@ model User {
 Unsupported(_ name: String)
 ```
 
+`Fields Attributes`
+
+> Field attributes, as their names suggest, apply to fields.
+> They are applied on the same row as the field and have the `@` symbol in front of them
+
 ```Typescript
-@id // Defines a single-field ID on the model
+ @id
+ // Defines a single-field ID on the model
+
+ @unique
+ // Defines a unique constraint for this field.
 ```
 
 ```Typescript
  @default()
 // Defines a default value for this field.
+
+ @default(now())
+ // Set a timestamp of the time when a record is created.
+```
+
+```Typescript
+@updatedAt
+// Automatically stores the time when a record was last updated.
+```
+
+`Bloc Attributes`
+
+> The block attributes have their own line and are applied inside the braces of the model, with two `@@` symbols before them.
+> And allows you to apply an option to the _whole block (model)_
+
+Example :
+
+You can't have two people with the same age and the same name
+
+```
+
 ```
 
 <div style="margin-top: 20px;"></div>
@@ -371,13 +401,14 @@ model Post {
   favoritedBy   User     @relation("FavoritePosts", fields: [favoritedById], references: [id])
   favoritedById String
   // By assigning a type of model in another it must necessarily be linked
+  // Refers to this category model
   categories Category[]
 }
 
 
 model Category {
   id String @id @default(uuid())
-  // Refers to this category model
+  // Refers to the Post model
   posts Post[]
 }
 ```
