@@ -14,8 +14,9 @@ datasource db {
 
 model User {
   id             String          @id @default(uuid())
+  age            Int
   name           String
-  email          String
+  email          String          @unique
   isAdmin        Boolean
   writtenPosts   Post[]          @relation("WrittenPosts")
   favoritePosts  Post[]          @relation("FavoritePosts")
@@ -31,9 +32,10 @@ model UserPreference {
 
 model Post {
   id            String     @id @default(uuid())
-  rating        Float
-  createdAt     DateTime
-  updatedAt     DateTime
+  title         String
+  averageRating Float
+  createdAt     DateTime   @default(now())
+  updatedAt     DateTime   @updatedAt
   author        User       @relation("WrittenPosts", fields: [authorId], references: [id])
   authorId      String
   favoritedBy   User?      @relation("FavoritePosts", fields: [favoritedById], references: [id])
@@ -43,5 +45,6 @@ model Post {
 
 model Category {
   id    String @id @default(uuid())
+  name  String
   posts Post[]
 }
