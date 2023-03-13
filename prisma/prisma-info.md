@@ -229,6 +229,9 @@ There are several ways to retrieve `user` information from the _database_.
 // Get all Users
 const users = await prisma.user.findMany()
 
+// Delete all Users
+const users = await prisma.user.deleteMany()
+
 // Get first 10 Users
 const users = await prisma.user.findMany({ take: 10 })
 
@@ -490,7 +493,38 @@ model Category {
 }
 ```
 
-<!-- #### **Data Migration into Database** -->
+#### **Data Migration into Database**
+
+> Once the different models have been created,
+> it is necessary to migrate them to the database,
+> using the command :
+
+```Bash
+npx prisma migrate <name>
+```
+
+When migrating your models, Prisma will warn you if you have added certain constraints that may have unexpected behaviour.
+
+_Example_ :
+
+```Bash
+⚠️  Warnings for the current datasource:
+
+  • A unique constraint covering the columns `[email]` on the table `User` will be added. If there are existing duplicate values, this will fail.
+  • A unique constraint covering the columns `[age,name]` on the table `User` will be added. If there are existing duplicate values, this will fail.
+
+  ✅ Are you sure you want create and apply this migration? ... yes
+✅ Enter a name for the new migration: ... dbtest
+
+Applying migration `20230313173047_dbtest`
+```
+
+For example, be careful because if there are duplicate values they will be deleted.
+
+Once the _validation_ is complete and you have given it a name.
+The _migration_ will be created and the client will be generated.
+A new sub-folder will be created in our `Prisma/migrations` folder.
+Containing a file with the `SQL` code of the _models_ created in the `schema file`.
 
 <!--
 : Create a new Prisma project using the command "npx prisma init" in a terminal. This command will generate a "prisma/schema.prisma" file that describes your database.
