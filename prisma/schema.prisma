@@ -23,6 +23,7 @@ model User {
   UserPreference UserPreference?
 
   @@unique([age, name])
+  @@index([email])
 }
 
 model UserPreference {
