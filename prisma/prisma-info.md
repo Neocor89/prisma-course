@@ -298,6 +298,13 @@ Unsupported(_ name: String)
 > They are applied on the same row as the field and have the `@` symbol in front of them
 
 ```Typescript
+model User {
+  id  String   @id @default(uuid()) // Field Attribute
+  email  String   @unique  // Field Attribute
+}
+```
+
+```Typescript
  @id
  // Defines a single-field ID on the model
 
@@ -327,9 +334,19 @@ Example :
 
 You can't have two people with the same age and the same name
 
+```Typescript
+model User {
+  age   Int
+  name  String
+
+  @@index(email)  // Block Attribute
+  // Defines an index on the model fields and Help with sorting and performance
+
+  @@unique([age, name])  // Block Attribute
+}
 ```
 
-```
+A list of references.
 
 <div style="margin-top: 20px;"></div>
 
