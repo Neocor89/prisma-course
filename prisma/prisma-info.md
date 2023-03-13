@@ -349,7 +349,64 @@ model User {
 }
 ```
 
-A list of references.
+Other type of data source generator model
+
+`Enum`
+
+Enums are defined via the enum block.
+You can define enums in your data model if they're supported by the datasource
+you use (e.g SQLite: not supported).
+
+> Syntax of the Enum model generator
+
+```Typescript
+
+keyWord modelName {
+ FIELDNAME
+}
+
+enum Role {
+  BASIC
+  ADMIN
+}
+```
+
+```Typescript
+
+// Without enum
+model User {
+  id       String   @id @default(uuid())
+  age      Int
+  name     String
+  email    String   @unique
+  isAdmin  Boolean  // Traditional Field
+
+  @@unique([age, name])
+  @@index([email])
+}
+
+/*
+---------------------------
+*/
+
+// Example of enum use
+model User {
+  id     String  @id @default(uuid())
+  age    Int
+  name   String
+  email  String  @unique
+  role   Role    @default(BASIC)  // enum field
+
+  @@unique([age, name])
+  @@index([email])
+}
+
+
+enum Role {
+  BASIC
+  ADMIN
+}
+```
 
 <div style="margin-top: 20px;"></div>
 
