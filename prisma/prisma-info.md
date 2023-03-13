@@ -343,6 +343,9 @@ model User {
   // Defines an index on the model fields and Help with sorting and performance
 
   @@unique([age, name])  // Block Attribute
+
+  @@id  // Block Attribute
+  // Possible to create a composite id for the model not for one field
 }
 ```
 
