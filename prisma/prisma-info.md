@@ -493,6 +493,8 @@ model Category {
 }
 ```
 
+  <div style="margin-top: 20px;"></div>
+
 #### **Data Migration into Database**
 
 > Once the different models have been created,
@@ -525,6 +527,27 @@ Once the _validation_ is complete and you have given it a name.
 The _migration_ will be created and the client will be generated.
 A new sub-folder will be created in our `Prisma/migrations` folder.
 Containing a file with the `SQL` code of the _models_ created in the `schema file`.
+
+  <div style="margin-top: 25px;"></div>
+
+### Problem of access to generated data models
+
+  <div style="margin-top: 10px;"></div>
+
+Once the migration is complete, the data is manipulated with the `scripts.ts` file containing our **Prisma client**.
+Sometimes there is a problem accessing the data.
+
+> In this case there are 3 possibilities that can be put in place :
+
+1. Generate the data with the command :
+
+```Bash
+npx prisma generate
+```
+
+2. Close the file containing the Prisma client and open it again.
+
+3. Relaunch the `Typescript` code by clicking on the method that is trying to access the data, while holding down the `Ctrl` key. Close the open file and test the data access with `Ctrl` + `space`
 
 <!--
 : Create a new Prisma project using the command "npx prisma init" in a terminal. This command will generate a "prisma/schema.prisma" file that describes your database.
