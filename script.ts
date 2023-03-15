@@ -3,13 +3,16 @@ const prisma = new PrismaClient();
 
 async function main() {
   //: Write Prisma Client Queries
-  // TODO RESTART HERE
-  // await prisma.user.create({
-  //   data: {
-
-  //   }
+  // TODO RESTART HERE 👇
+  
+  const user = await prisma.user.create({
+    data: {
+      name: "Ben",
+      email: "bendevweb@test.com",
+      age: 37
+    }
     
-  //   })
+    })
   
 }
 
