@@ -73,7 +73,7 @@ This command should output the version of _Prisma_ installed on your system.
 
 <div style="margin-top: 30px;"></div>
 
-### **Setup Prisma Database**
+> ### **Setup Prisma Database**
 
 ---
 
@@ -83,11 +83,11 @@ Next, create a new Prisma project by running the following command in your termi
 npx prisma init
 ```
 
-> This command will create and initialize a new Prisma project with a basic directory structure and a "<span style="text-decoration: underline;">schema.prisma</span>" file that describes your **database schema**.
+This command will create and initialize a new Prisma project with a basic directory structure and a "<span style="text-decoration: underline;">schema.prisma</span>" file that describes your **database schema**.
 
-<div style="margin-top: 15px;"></div>
+<div style="margin-top: 10px;"></div>
 
-> It is possible to specify directly the database you use with this command
+It is possible to specify directly the database you use with this command
 
 ```Bash
 npx prisma init --datasource-provider <your-database>
@@ -530,6 +530,29 @@ Containing a file with the `SQL` code of the _models_ created in the `schema fil
 
   <div style="margin-top: 25px;"></div>
 
+> Each time one or more `models` are modified the `database` must be updated with the following command.
+
+```Bash
+ npx prisma mmigrate <datatabase>
+```
+
+> `<database>` is the name of the database you specified during the migration
+
+For example for the case used the database used is `dev`.
+
+```Bash
+ npx prisma mmigrate dev
+```
+
+> It is also preferable to name it, with the flag  
+> **--name**
+
+```Bash
+npx prisma mmigrate dev --name <your-migration-name>
+```
+
+  <div style="margin-top: 25px;"></div>
+
 ### Problem of access to generated data models
 
   <div style="margin-top: 10px;"></div>
@@ -548,6 +571,29 @@ npx prisma generate
 2. Close the file containing the Prisma client and open it again.
 
 3. Relaunch the `Typescript` code by clicking on the method that is trying to access the data, while holding down the `Ctrl` key. Close the open file and test the data access with `Ctrl` + `space`
+
+  <div style="margin-top: 25px;"></div>
+
+> Once you have access to the data you can start adding information to the database
+
+<div style="margin-top: 12px;"></div>
+
+```Typescript
+
+// script.ts
+const user = await prisma.user.create({
+    data: {
+      name: "Ben",
+      email: "bendevweb@test.com",
+      age: 37,
+      UserPreference: {
+        create: {
+          emailUpdates: true,
+        }
+      }
+    },
+    })
+```
 
 <!--
 : Create a new Prisma project using the command "npx prisma init" in a terminal. This command will generate a "prisma/schema.prisma" file that describes your database.
