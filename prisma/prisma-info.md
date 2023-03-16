@@ -223,6 +223,8 @@ compile our **script.ts** file at each new modification.
 [nodemon] clean exit - waiting for changes before restart
 ```
 
+> ### **GET Data**
+
 There are several ways to retrieve `user` information from the _database_.
 
 ```Typescript
@@ -557,16 +559,26 @@ For example for the case used :
 npx prisma mmigrate dev --name test2
 ```
 
+- A message in the terminal, will warn us of the good progress of the new migration.
+
+```Bash
+The following migration(s) have been created and applied from new schema changes:
+
+migrations/
+  └─ 20230316163640_test2/
+    └─ migration.sql
+```
+
   <div style="margin-top: 25px;"></div>
 
-### Problem of access to generated data models
+> ### **Problem of access to generated data models**
 
   <div style="margin-top: 10px;"></div>
 
 Once the migration is complete, the data is manipulated with the `scripts.ts` file containing our **Prisma client**.
 Sometimes there is a problem accessing the data.
 
-> In this case there are 3 possibilities that can be put in place :
+In this case there are 3 possibilities that can be put in place :
 
 1. Generate the data with the command :
 
@@ -582,10 +594,16 @@ npx prisma generate
 
 > Once you have access to the data you can start adding information to the database
 
-<div style="margin-top: 12px;"></div>
+<div style="margin-top: 25px;"></div>
+
+**include**
+
+---
+
+Thanks to the definition of models, Prsima allows
+to include specific data by nesting them in others.
 
 ```Typescript
-
 // script.ts
 const user = await prisma.user.create({
     data: {
@@ -595,10 +613,165 @@ const user = await prisma.user.create({
       UserPreference: {
         create: {
           emailUpdates: true,
-        }
-      }
+        },
+      },
+    },
+    // Nesting
+    include: {
+      UserPreference: true,
     },
     })
+
+
+// Result
+    {
+  id: 'd59f1874-c847-4783-b7a7-e9b49681',
+  age: 37,
+  name: 'Ben',
+  email: 'bendevweb@test.com',
+  role: 'BASIC',
+  userPreferenceId: '6f2ce73f-ab5b-4be1-bbaf-8188632',
+  UserPreference: { id: '6f2ce73f-ab5b-4be1-bbaf-8188632', emailUpdates: true }
+}
+```
+
+<div style="margin-top: 20px;"></div>
+
+**Select**
+
+---
+
+Selected and returned a specific fields to fetch from the User
+
+```Typescript
+const user = await prisma.user.create({
+    data: {
+      name: "Ben",
+      email: "bendevweb@test.com",
+      age: 37,
+      UserPreference: {
+        create: {
+          emailUpdates: true,
+        },
+      },
+    },
+
+    // Choice of fields to select
+    select: {
+      name: true,
+      // Basic selection
+      UserPreference : true,
+
+      // Nested selection
+      UserPreference : {select: {id: true} },
+    },
+    })
+
+    // Result
+    {
+      name: 'Ben',
+      UserPreference: { id: '43dd4d84-2483-4665-8611-7d6c95e6c3d2' }
+    }
+```
+
+> It is only possible to make one `selection` or `inclusion` at a time.
+
+> <p style="text-decoration: underline; font-weight: bold;">impossible to do both at the same time</p>
+
+**log**
+Allows to record new requests and to have a log of our current requests and display all the execution process.
+
+_Useful for_ :
+
+- `Debugging` certain things
+- Analysis and `performance improvement`.
+
+```Typescript
+const prisma = new PrismaClient({ log: ["query"]});
+
+// Defaults to stdout
+log: ['query', 'info', 'warn', 'error']
+
+// Emit as events
+log: [
+ { emit: 'stdout', level: 'query' },
+ { emit: 'stdout', level: 'info' },
+ { emit: 'stdout', level: 'warn' }
+ { emit: 'stdout', level: 'error' }
+]
+```
+
+> Here is what is happening with Prisma in the `background`
+
+```SQL
+prisma:query BEGIN
+prisma:query SELECT `test`.`User`.`id` FROM `test`.`User` WHERE 1=1
+prisma:query SELECT `test`.`User`.`id` FROM `test`.`User` WHERE 1=1
+prisma:query DELETE FROM `test`.`User` WHERE (`test`.`User`.`id` IN (?) AND 1=1)
+prisma:query COMMIT
+prisma:query BEGIN
+prisma:query INSERT INTO `test`.`UserPreference` (`id`,`emailUpdates`) VALUES (?,?)
+prisma:query INSERT INTO `test`.`User` (`id`,`age`,`name`,`email`,`role`,`userPreferenceId`) VALUES (?,?,?,?,?,?)
+prisma:query SELECT `test`.`User`.`id`, `test`.`User`.`name`, `test`.`User`.`userPreferenceId` FROM `test`.`User` WHERE `test`.`User`.`id` = ? LIMIT ? OFFSET ?
+prisma:query SELECT `test`.`UserPreference`.`id` FROM `test`.`UserPreference` WHERE `test`.`UserPreference`.`id` IN (?)
+prisma:query COMMIT
+```
+
+> ### **CREATE Data**
+
+For data creation it is possible to create several data at once with the function <span style="color: greenYellow; font-weight: bold;">createMany()</span>,
+
+- Takes an array[],
+- Not accept the clause of `select` options where `include`
+
+```Typescript
+const users = await prisma.user.createMany({
+    data: [{
+      name: "Ben",
+      email: "bendevweb@test.com",
+      age: 37,
+    },
+    {
+      name: "Mat",
+      email: "mat@test.com",
+      age: 57,
+    },
+    {
+      name: "Sam",
+      email: "sam@test.com",
+      age: 47,
+    }]
+    });
+
+    // Option not available
+    select: {
+      name: true,
+      UserPreference : {select: {id: true}},
+    },
+```
+
+Prisma sends us through the terminal the number of users created
+
+```JSON
+{ count: 3 }
+```
+
+> ### **Reading the data**
+
+Allows to read data from `models` that have been
+specified with the `@unique` attribute.
+
+```Typescript
+// Get one User
+const user = await prisma.user.findUnique({});
+
+
+// Find zero or one User that matches the filter.
+const user = await prisma.user.findUnique({
+where: {
+  // ... provide filter here
+}
+})
 ```
 
 <!--
