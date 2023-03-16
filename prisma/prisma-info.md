@@ -551,6 +551,12 @@ For example for the case used the database used is `dev`.
 npx prisma mmigrate dev --name <your-migration-name>
 ```
 
+For example for the case used :
+
+```Bash
+npx prisma mmigrate dev --name test2
+```
+
   <div style="margin-top: 25px;"></div>
 
 ### Problem of access to generated data models
