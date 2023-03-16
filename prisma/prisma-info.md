@@ -762,16 +762,44 @@ Allows to read data from `models` that have been
 specified with the `@unique` attribute.
 
 ```Typescript
-// Get one User
+// Example of unique attributes
+model Category {
+  id    String @id @default(uuid())
+  name  String @unique
+}
+```
+
+To read the data from the database containing the `@unique` attribute.
+You have to use the <span style="color: greenYellow; font-weight: bold;">findMany()</span> function which
+
+- Takes an object : `{}`
+- Takes a search filter : `where`
+- Always returns a : `single data`
+
+```Typescript
+// script.ts
 const user = await prisma.user.findUnique({});
 
 
 // Find zero or one User that matches the filter.
 const user = await prisma.user.findUnique({
-where: {
-  // ... provide filter here
-}
+  // ... Provide filter for @unique attribute fields
+  where: {
+    // Example
+    name: "Ben"
+  }
 })
+
+
+// Result
+{
+  id: 'e08fe917-47d6-481f-b176-9b01f04',
+  age: 37,
+  name: 'Ben',
+  email: 'bendevweb@test.com',
+  role: 'BASIC',
+  userPreferenceId: null
+}
 ```
 
 <!--
