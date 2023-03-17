@@ -766,6 +766,10 @@ Prisma sends us through the terminal the number of users created
 
 ---
 
+<div style="margin-top: 10px;"></div>
+
+[findUnique](#find-unique)
+
 Allows to read data from `models` that have been
 specified with the `@unique` attribute.
 
@@ -855,8 +859,75 @@ const user = await prisma.user.findUnique({
 The combination of the two constraints must be valid,
 to be able to read the information requested from the database.
 
+> Otherwise we get
+
+```Bash
+null
+```
+
+<div style="margin-top: 20px;"></div>
+
+[findFirst](#find-first)
+
+To find the first reference in the database with Prisma we use the function <span style="color: greenYellow; font-weight: bold;">findFirst()</span>
+
+Returns the first reference meeting the condition
+
+```Typescript
+const user = await prisma.user.findFirst({
+  where: {
+    age: 47,
+  }
+})
+
+// Result
+{
+  id: 'f9251c9c-ed30-4c6b-8b3a-affa2019',
+  age: 47,
+  name: 'Jane',
+  email: 'jane@test.com',
+  role: 'BASIC',
+  userPreferenceId: null
+}
+```
+
+[findMany](#find-many)
+
+<span style="color: greenYellow; font-weight: bold;">findMany()</span> is very similar to `findFirst`,
+but it simply returns all references that match the requested property value
+
+```Typescript
+// Get first 10 Users
+const users = await prisma.user.findMany({ take: 10 })
+
+// Only select the `id`
+const userWithIdOnly = await prisma.user.findMany({ select: { id: true } })
+
+// All users with the same name "Ben"
+const user = await prisma.user.findMany({
+  where: {
+    name: "Ben",
+  }
+})
+
+// Returns all results
+[
+  {
+    id: 'e08fe917-47d6-481f-b176-9b01f04',
+    age: 37,
+    name: 'Ben',
+    email: 'bendevweb@test.com',
+  },
+  {
+    id: 'f75b15be-97d2-4cd0-b3b2-2c58ab3',
+    age: 38,
+    name: 'Ben',
+    email: 'bendevweb@test2.com',
+  }
+]
+```
+
 <!--
-: Create a new Prisma project using the command "npx prisma init" in a terminal. This command will generate a "prisma/schema.prisma" file that describes your database.
 
 ```Bash
 npm install --save-dev prisma typescript ts-node @types/node nodemon
