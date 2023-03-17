@@ -717,7 +717,11 @@ prisma:query SELECT `test`.`UserPreference`.`id` FROM `test`.`UserPreference` WH
 prisma:query COMMIT
 ```
 
+<div style="margin-top: 30px;"></div>
+
 > ### **CREATE Data**
+
+---
 
 For data creation it is possible to create several data at once with the function <span style="color: greenYellow; font-weight: bold;">createMany()</span>,
 
@@ -756,7 +760,11 @@ Prisma sends us through the terminal the number of users created
 { count: 3 }
 ```
 
+<div style="margin-top: 30px;"></div>
+
 > ### **Reading the data**
+
+---
 
 Allows to read data from `models` that have been
 specified with the `@unique` attribute.
@@ -770,7 +778,7 @@ model Category {
 ```
 
 To read the data from the database containing the `@unique` attribute.
-You have to use the <span style="color: greenYellow; font-weight: bold;">findMany()</span> function which
+You have to use the <span style="color: greenYellow; font-weight: bold;">findUnique()</span> function which
 
 - Takes an object : `{}`
 - Takes a search filter : `where`
@@ -801,6 +809,51 @@ const user = await prisma.user.findUnique({
   userPreferenceId: null
 }
 ```
+
+Prisma allows you to define multiple uniqueness constraints,
+on different fields with the unique attribute.
+
+```Typescript
+model User {
+  // Definition of constraints on several fields
+  @@unique([age, name])
+}
+```
+
+They are represented by an `underscore` between the different properties.
+
+Then we have to pass an object `{}` to the clause of our choice :
+
+- <span style="color: greenYellow;">where</span>
+- <span style="color: greenYellow;">include</span>
+
+With the values of the properties we want to retrieve
+
+```Typescript
+// Example
+const user = await prisma.user.findUnique({
+    where: {
+      // Reading the recorded data
+      age_name: {
+        age : 37,
+        name: "Ben",
+      }
+    }
+  })
+
+  // Result
+  {
+  id: 'e08fe917-47d6-481f-b176-9b01f04',
+  age: 37,
+  name: 'Ben',
+  email: 'bendevweb@test.com',
+  role: 'BASIC',
+  userPreferenceId: null
+}
+```
+
+The combination of the two constraints must be valid,
+to be able to read the information requested from the database.
 
 <!--
 : Create a new Prisma project using the command "npx prisma init" in a terminal. This command will generate a "prisma/schema.prisma" file that describes your database.
