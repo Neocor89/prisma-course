@@ -1233,7 +1233,7 @@ const user = await prisma.user.findMany({
 ```
 
 <div style="margin-top: 0px; margin-bottom: 0px;">
-<span style="color: greenYellow; font-weight: 600; font-size: 17px;">notin</span>
+<span style="color: greenYellow; font-weight: 600; font-size: 17px;">notIn</span>
 </div>
 
 The `notin` option takes an `array[]` with the value(s),
@@ -1370,6 +1370,117 @@ const user = await prisma.user.findMany({
 })
 
 // Returns all greater or equal values
+```
+
+<div style="margin-top: 25px;"></div>
+
+<div style="margin-top: 0px; margin-bottom: 0px;">
+<span style="color: greenYellow; font-weight: 600; font-size: 17px;">contains</span>
+</div>
+
+The `contains` option allows you to check which **text** is
+<span style="text-decoration: underline;">contained in another part of a text</span>.
+
+```Typescript
+const user = await prisma.user.findMany({
+  where: {
+    email: {contains: "@test2.com" },
+  },
+})
+
+// Result
+[
+  {
+    id: 'adf18ca4-a642-4f85-96ec-fab3e3a',
+    age: 37,
+    name: 'Jhon',
+    email: 'jhon@teste.com',
+  },
+  {
+    id: 'b30775fc-a7ff-4125-8907-183a3e',
+    age: 39,
+    name: 'Ben',
+    email: 'ben@test2.com',
+  }
+]
+```
+
+- It is possible to be more precise by adding <span style="text-decoration: underline;">additional parameters</span>.
+- If there are no values in the database, an empty `array[]` is returned.
+
+```Typescript
+const user = await prisma.user.findMany({
+    where: {
+      name: "Ben"
+      email: {contains: "@test2.com" },
+    },
+  })
+
+  // Result
+[
+  {
+    id: 'b30775fc-a7ff-4125-8907-183a3e',
+    age: 39,
+    name: 'Ben',
+    email: 'ben@test2.com',
+  }
+]
+```
+
+<div style="margin-top: 25px;"></div>
+
+<div style="margin-top: 0px; margin-bottom: 0px;">
+<span style="color: greenYellow; font-weight: 600; font-size: 17px;">endsWith</span>
+</div>
+
+The `endsWith` option allows to check the end of a **text** is
+<span style="text-decoration: underline;">contained in another part of a text</span>.
+
+```Typescript
+const user = await prisma.user.findMany({
+  where: {
+    email: {endsWith: "@test2.com" },
+  },
+})
+
+```
+
+- It is possible to be more precise by adding <span style="text-decoration: underline;">additional parameters</span>.
+- If there are no values in the database, an empty `array[]` is returned.
+
+```Typescript
+const user = await prisma.user.findMany({
+    where: {
+      name: "Ben"
+      email: {contains: "@test2.com" },
+    },
+  })
+
+  // Result
+[
+  {
+    id: 'b30775fc-a7ff-4125-8907-183a3e',
+    age: 39,
+    name: 'Ben',
+    email: 'ben@test2.com',
+  }
+]
+```
+
+<div style="margin-top: 0px; margin-bottom: 0px;">
+<span style="color: greenYellow; font-weight: 600; font-size: 17px;">startWith</span>
+</div>
+
+The `startWith` option allows to check the start of a **text** is
+<span style="text-decoration: underline;">contained in another part of a text</span>.
+
+```Typescript
+const user = await prisma.user.findMany({
+  where: {
+    email: {startWith: "ben" },
+  },
+})
+
 ```
 
 <!--
