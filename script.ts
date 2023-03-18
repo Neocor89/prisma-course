@@ -8,14 +8,11 @@ async function main() {
 
   const user = await prisma.user.findMany({
     where: {
-        name: "Céline"
+      name: "Ben",
+      age: {lt: 38 }
     },
-    orderBy: {
-      age: "asc",
-    },
-    take: 2,
   })
-    console.log(user);
+    console.log(user)
 }
 
 main()
