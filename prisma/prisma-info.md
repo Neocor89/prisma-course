@@ -809,8 +809,6 @@ const user = await prisma.user.findUnique({
   age: 37,
   name: 'Ben',
   email: 'bendevweb@test.com',
-  role: 'BASIC',
-  userPreferenceId: null
 }
 ```
 
@@ -851,8 +849,6 @@ const user = await prisma.user.findUnique({
   age: 37,
   name: 'Ben',
   email: 'bendevweb@test.com',
-  role: 'BASIC',
-  userPreferenceId: null
 }
 ```
 
@@ -886,8 +882,6 @@ const user = await prisma.user.findFirst({
   age: 47,
   name: 'Jane',
   email: 'jane@test.com',
-  role: 'BASIC',
-  userPreferenceId: null
 }
 ```
 
@@ -932,25 +926,244 @@ const user = await prisma.user.findMany({
 The `findMany` function of Prisma allows options, paginations and distinctions,
 with the following syntax:
 
+<div style="margin-top: 20px;"></div>
+
 #### <p style="text-decoration: underline; font-weight: bold;">Distinction</p>
 
-The `distinct` option in Prisma is a feature that allows you to filter the results of a query to eliminate duplicates by one or more specified fields1.
+---
+
+The `distinct` option in Prisma is a feature that allows you to filter the results of a query to eliminate duplicates by one or more specified fields.
+
+- Take an `array[]`
+- Accept **one** or **more** search `fields`
 
 For example, if you want to get all users with unique **name** you can use the _distinct_ option on the **name field**.
 
 ```Typescript
-//
+// Returns all values that have a unique name and age and are different for each of them
 const users = await prisma.user.findMany({
   where: {
     name: "Ben",
   },
-  distinct: ["name"]
+  distinct: ["name", "age"]
 })
+
+// Result
+[
+  {
+    id: 'e08fe917-47d6-481f-b176-9b01f04',
+    age: 37,
+    name: 'Ben',
+    email: 'bendevweb@test.com',
+  },
+  {
+    id: 'f75b15be-97d2-4cd0-b3b2-2c58ab3',
+    age: 38,
+    name: 'Ben',
+    email: 'bendevweb@test2.com',
+  }
+]
 ```
+
+### [Distinct One to One](#distinct-one-to-one)
+
+To use the "distinct" option with relations, you must first define the relations between your models in the Prisma schema.
+
+Then you can use a nested select to include the relationship fields in your query.
+
+Get all users with unique names and profiles, you can do :
+
+```Typescript
+const users = await prisma.user.findMany({
+  distinct: ["name"],
+  select: {
+    name: true,
+    profile: true,
+  },
+});
+```
+
+### [Distinct Many to Many](#distinct-many-to-many)
+
+If you have a many-to-many relationship, you must use an intermediate model to represent the relationship in the Prisma schema. For example, if you have a relationship between Post and Category, you can create a PostCategory model that contains the foreign keys of both models :
+
+```SQL
+model Post {
+  id        Int    @id @default(autoincrement())
+  title     String
+  categories PostCategory[]
+}
+
+model Category {
+  id    Int    @id @default(autoincrement())
+  name  String
+  posts PostCategory[]
+}
+
+model PostCategory {
+  post       Post     @relation(fields: [postId], references: [id])
+  postId     Int
+  category   Category @relation(fields: [categoryId], references: [id])
+  categoryId Int
+
+  @@id([postId, categoryId])
+}
+```
+
+Then you can use the "distinct" option with a nested select to get posts with unique categories:
+
+```Typescript
+const posts = await prisma.post.findMany({
+  distinct: ["title"],
+  select: {
+    title: true,
+    categories: {
+      select: {
+        category: true,
+      },
+    },
+  },
+});
+```
+
+<div style="margin-top: 20px;"></div>
 
 #### <p style="text-decoration: underline; font-weight: bold;">Pagination</p>
 
+---
+
+<div style="margin-top: 15px;"></div>
+
+The pagination is organized with different options and keywords
+
+<span style="color: greenYellow; font-weight: 600;"></span>
+
+## [take](#pagination-take)
+
+which returns the number of **available users**,
+passed in value to the **keyword**.
+
+```Typescript
+// Return 2 Users if exist
+const user = await prisma.user.findMany({
+    where: {
+        name: "Jane"
+    },
+    take: 2,
+  })
+
+// Result
+[
+  {
+    id: '5c641e9f-4c9c-40ce-940a-26a7ac4',
+    age: 48,
+    name: 'Jane',
+    email: 'jane@test2.com',
+  },
+  {
+    id: 'f9251c9c-ed30-4c6b-8b3a-affa201',
+    age: 47,
+    name: 'Jane',
+    email: 'jane@test.com',
+  }
+]
+```
+
+## [skip](#pagination-skip)
+
+The `skip` option, can also be used before skipping a specific number of first results
+
+```Typescript
+const user = await prisma.user.findMany({
+    where: {
+        name: "Jane"
+    },
+    take: 2,
+    skip: 1,
+  })
+
+// Result
+[
+  {
+    id: 'f9251c9c-ed30-4c6b-8b3a-affa201',
+    age: 47,
+    name: 'Jane',
+    email: 'jane@test.com',
+  }
+]
+```
+
+### [Order by](#pagination-order-by)
+
+The `Order by` option allows you to organize the pagination of the results in the chosen order.
+
+<span style="color: greenYellow; font-weight: 600; font-size: 17px;">asc</span>
+
+```Typescript
+const user = await prisma.user.findMany({
+    where: {
+        name: "Jane"
+    },
+    orderBy: {
+      age: "asc",
+    },
+    take: 2,
+  })
+
+// Result
+[
+  {
+    id: 'f9251c9c-ed30-4c6b-8b3a-affa20198cdd',
+    age: 47,
+    name: 'Jane',
+  },
+  {
+    id: '5c641e9f-4c9c-40ce-940a-26a7ac42529d',
+    age: 48,
+    name: 'Jane',
+  }
+]
+```
+
+<span style="color: greenYellow; font-weight: 600; font-size: 17px;">desc</span>
+
+```Typescript
+const user = await prisma.user.findMany({
+    where: {
+        name: "Jane"
+    },
+    orderBy: {
+      age: "desc",
+    },
+    take: 2,
+  })
+
+// Result
+[
+  {
+    id: '5c641e9f-4c9c-40ce-940a-26a7ac42529d',
+    age: 48,
+    name: 'Jane',
+  },
+  {
+    id: 'f9251c9c-ed30-4c6b-8b3a-affa20198cdd',
+    age: 47,
+    name: 'Jane',
+  }
+]
+```
+
+<div style="margin-top: 30px;"></div>
+
+### <p style="text-decoration: underline; font-weight: bold;">Advanced filters</p>
+
+## [Where](#advanced-filters-where)
+
+Prisma allows you to filter the results in a very efficient way, using the "Where" closes.
+
 <!--
+<div style="margin-top: 15px;"></div>
+
 ```Bash
 npm install --save-dev prisma typescript ts-node @types/node nodemon
 npx prisma init --datasource-provider mysql
