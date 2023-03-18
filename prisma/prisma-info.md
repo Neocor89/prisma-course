@@ -1159,7 +1159,218 @@ const user = await prisma.user.findMany({
 
 ## [Where](#advanced-filters-where)
 
-Prisma allows you to filter the results in a very efficient way, using the "Where" closes.
+Prisma allows you to filter the results in a very efficient way,
+using the `where` closes.
+
+<div style="margin-top: 0px; margin-bottom: 0px;">
+<span style="color: greenYellow; font-weight: 600; font-size: 17px;">equals</span>
+</div>
+
+Take an `object{}` with different options :
+
+The option `equals` returns <span style="text-decoration: underline;">all exact values</span> in the database.
+
+```Typescript
+const user = await prisma.user.findMany({
+    where: {
+      email: {
+        equals: "bendevweb@test.com"
+      },
+    },
+  });
+
+  // Result
+  [
+  {
+    id: 'e08fe917-47d6-481f-b176-9b01f04ce5a7',
+    age: 37,
+    name: 'Ben',
+    email: 'bendevweb@test.com',
+  }
+]
+```
+
+<div style="margin-top: 0px; margin-bottom: 0px;">
+<span style="color: greenYellow; font-weight: 600; font-size: 17px;">not</span>
+</div>
+
+The `not` option returns all values different from the passed value, present in the database.
+
+```Typescript
+const user = await prisma.user.findMany({
+  where: {
+    email: {
+      not: "Ben"
+    },
+  },
+});
+
+[
+  // All results not equal to name : "Ben"
+]
+```
+
+<div style="margin-top: 0px; margin-bottom: 0px;">
+<span style="color: greenYellow; font-weight: 600; font-size: 17px;">in</span>
+</div>
+
+The `in` option takes an `array[]` with the value(s) to include and _returns_ the value(s), **present** in the database
+
+```Typescript
+const user = await prisma.user.findMany({
+  where: {
+    email: {
+      in: {["Ben"]},
+      // OR
+      in: {["Ben", "Céline"]}
+    },
+  },
+});
+
+[
+  // All results not include name : "Ben"
+]
+```
+
+<div style="margin-top: 0px; margin-bottom: 0px;">
+<span style="color: greenYellow; font-weight: 600; font-size: 17px;">notin</span>
+</div>
+
+The `notin` option takes an `array[]` with the value(s),
+<span style="text-decoration: underline;">not to be included</span> and returns the value(s), present in the database
+
+```Typescript
+ const user = await prisma.user.findMany({
+    where: {
+      name: {notIn: ["Ben", "Céline"] }
+    },
+  })
+
+  // Result
+  [
+  {
+    id: 'adf18ca4-a642-4f85-96ec-fab3e3a',
+    age: 7,
+    name: 'Jhon',
+    email: 'jhon@test.com'
+  },
+  {
+    id: 'b30775fc-a7ff-4125-8907-183a3e',
+    age: 8,
+    name: 'Jhon',
+    email: 'jhon@test2.com'
+  }
+]
+```
+
+<div style="margin-top: 0px; margin-bottom: 0px;">
+<span style="color: greenYellow; font-weight: 600; font-size: 17px;">lt</span>
+</div>
+
+The `lt` option takes an Object, and returns all the values present in the database,
+lower than the one chosen
+
+```Typescript
+const user = await prisma.user.findMany({
+    where: {
+      age: { lt: 20 },
+    },
+  })
+
+[
+  {
+    id: 'adf18ca4-a642-4f85-96ec-fab3e3a6e84d',
+    age: 7,
+    name: 'Jhon',
+    email: 'jhon@test.com',
+  },
+  {
+    id: 'b30775fc-a7ff-4125-8907-183a3e7bf3d2',
+    age: 8,
+    name: 'Jhon',
+    email: 'jhon@test2.com',
+  }
+]
+```
+
+- It is possible to be more precise by adding <span style="text-decoration: underline;">additional parameters</span>.
+- If there are no values in the database, an empty `array[]` is returned.
+
+```Typescript
+const user = await prisma.user.findMany({
+    where: {
+      name: "Ben",
+      age: { lt: 20 },
+    },
+  })
+
+// Result
+[
+  {
+    id: 'adf18ca4-a642-4f85-96ec-fab3e3a',
+    age: 17,
+    name: 'Ben',
+    email: 'ben@test.com',
+  },
+  {
+    id: 'b30775fc-a7ff-4125-8907-183a3e',
+    age: 19,
+    name: 'Ben',
+    email: 'ben@test2.com',
+  }
+]
+```
+
+<div style="margin-top: 0px; margin-bottom: 0px;">
+<span style="color: greenYellow; font-weight: 600; font-size: 17px;">gt</span>
+</div>
+
+The `gt` option takes an `Object{}`, and returns all the values present in the database,
+<span style="text-decoration: underline;">greater than the one chosen</span>.
+
+```Typescript
+const user = await prisma.user.findMany({
+  where: {
+    name: "Ben",
+    age: { gt: 20 },
+  },
+})
+
+// Returns all greater values
+```
+
+<div style="margin-top: 0px; margin-bottom: 0px;">
+<span style="color: greenYellow; font-weight: 600; font-size: 17px;">lte</span>
+</div>
+
+The `lte` option takes an `Object{}`, and returns all the values present in the database,
+lower or `equal` than the one chosen
+
+```Typescript
+const user = await prisma.user.findMany({
+    where: {
+      age: { lte: 20 },
+    },
+  })
+```
+
+<div style="margin-top: 0px; margin-bottom: 0px;">
+<span style="color: greenYellow; font-weight: 600; font-size: 17px;">gte</span>
+</div>
+
+The `gte` option takes an `Object{}`, and returns all the values present in the database,
+greater or `equal` than the one chosen.
+
+```Typescript
+const user = await prisma.user.findMany({
+  where: {
+    name: "Ben",
+    age: { gte: 20 },
+  },
+})
+
+// Returns all greater or equal values
+```
 
 <!--
 <div style="margin-top: 15px;"></div>
