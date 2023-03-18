@@ -4,28 +4,18 @@ const prisma = new PrismaClient();
 async function main() {
   //: Write Prisma Client Queries
 
-  await prisma.user.deleteMany();
-  
-  const users = await prisma.user.createMany({
-    data: [{
-      name: "Ben",
-      email: "bendevweb@test.com",
-      age: 37,
+  // await prisma.user.deleteMany();
+
+  const user = await prisma.user.findMany({
+    where: {
+        name: "Céline"
     },
-    {
-      name: "Matèo",
-      email: "mateo@test.com",
-      age: 7,
+    orderBy: {
+      age: "asc",
     },
-    {
-      name: "Céline",
-      email: "celine@test.com",
-      age: 47,
-    }]
-    })
-    
-    console.log(users);
-    
+    take: 2,
+  })
+    console.log(user);
 }
 
 main()
