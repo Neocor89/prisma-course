@@ -676,7 +676,7 @@ const user = await prisma.user.create({
 
 > It is only possible to make one `selection` or `inclusion` at a time.
 
-> <p style="text-decoration: underline; font-weight: bold;">impossible to do both at the same time</p>
+<p style="text-decoration: underline; font-weight: bold;">Impossible to do both at the same time</p>
 
 **log**
 Allows to record new requests and to have a log of our current requests and display all the execution process.
@@ -723,7 +723,7 @@ prisma:query COMMIT
 
 ---
 
-For data creation it is possible to create several data at once with the function <span style="color: greenYellow; font-weight: bold;">createMany()</span>,
+For data creation it is possible to create several data at once with the function <span style="color: greenYellow; font-weight: 600;">createMany()</span>,
 
 - Takes an array[],
 - Not accept the clause of `select` options where `include`
@@ -762,13 +762,13 @@ Prisma sends us through the terminal the number of users created
 
 <div style="margin-top: 30px;"></div>
 
-> ### **Reading the data**
+> ### **Reading data**
 
 ---
 
-<div style="margin-top: 10px;"></div>
+<div style="margin-top: 25px;"></div>
 
-[findUnique](#find-unique)
+### [findUnique](#find-unique)
 
 Allows to read data from `models` that have been
 specified with the `@unique` attribute.
@@ -782,7 +782,7 @@ model Category {
 ```
 
 To read the data from the database containing the `@unique` attribute.
-You have to use the <span style="color: greenYellow; font-weight: bold;">findUnique()</span> function which
+You have to use the <span style="color: greenYellow; font-weight: 600;">findUnique()</span> function which
 
 - Takes an object : `{}`
 - Takes a search filter : `where`
@@ -859,7 +859,7 @@ const user = await prisma.user.findUnique({
 The combination of the two constraints must be valid,
 to be able to read the information requested from the database.
 
-> Otherwise we get
+- Otherwise we get
 
 ```Bash
 null
@@ -867,9 +867,9 @@ null
 
 <div style="margin-top: 20px;"></div>
 
-[findFirst](#find-first)
+### [findFirst](#find-first)
 
-To find the first reference in the database with Prisma we use the function <span style="color: greenYellow; font-weight: bold;">findFirst()</span>
+To find the first reference in the database with Prisma we use the function <span style="color: greenYellow; font-weight: 600;">findFirst()</span>
 
 Returns the first reference meeting the condition
 
@@ -891,9 +891,11 @@ const user = await prisma.user.findFirst({
 }
 ```
 
-[findMany](#find-many)
+### [findMany](#find-many)
 
-<span style="color: greenYellow; font-weight: bold;">findMany()</span> is very similar to `findFirst`,
+#
+
+<span style="color: greenYellow; font-weight: 600;">findMany()</span> is very similar to `findFirst`,
 but it simply returns all references that match the requested property value
 
 ```Typescript
@@ -927,8 +929,28 @@ const user = await prisma.user.findMany({
 ]
 ```
 
-<!--
+The `findMany` function of Prisma allows options, paginations and distinctions,
+with the following syntax:
 
+#### <p style="text-decoration: underline; font-weight: bold;">Distinction</p>
+
+The `distinct` option in Prisma is a feature that allows you to filter the results of a query to eliminate duplicates by one or more specified fields1.
+
+For example, if you want to get all users with unique **name** you can use the _distinct_ option on the **name field**.
+
+```Typescript
+//
+const users = await prisma.user.findMany({
+  where: {
+    name: "Ben",
+  },
+  distinct: ["name"]
+})
+```
+
+#### <p style="text-decoration: underline; font-weight: bold;">Pagination</p>
+
+<!--
 ```Bash
 npm install --save-dev prisma typescript ts-node @types/node nodemon
 npx prisma init --datasource-provider mysql
