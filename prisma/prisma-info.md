@@ -1514,6 +1514,8 @@ const user = await prisma.user.findMany({
 <span style="color: greenYellow; font-weight: 600;">AND</span>
 </div>
 
+Returns all results that meet the two selected conditions
+
 ```Typescript
 const user = await prisma.user.findMany({
     where: {
@@ -1539,11 +1541,13 @@ const user = await prisma.user.findMany({
 <span style="color: greenYellow; font-weight: 600;">OR</span>
 </div>
 
+Returns all results that meet one of the two selected conditions.
+
 ```Typescript
 const user = await prisma.user.findMany({
     where: {
       OR: [
-        { email: { startsWith: "ben" } },
+        { email: { startsWith: "jan" } },
         { age: { gt: 37 } }
       ],
     },
@@ -1552,15 +1556,28 @@ const user = await prisma.user.findMany({
 // Results Combination
 [
   {
-    id: 'f75b15be-97d2-4cd0-b3b2-2c58ab3893e4',
+    id: '5c641e9f-4c9c-40ce-940a-26a7ac',
+    age: 48,
+    name: 'Jane',
+    email: 'jane@test2.com',
+  },
+  {
+    id: 'f75b15be-97d2-4cd0-b3b2-2c58ab',
     age: 38,
     name: 'Ben',
     email: 'bendevweb@test2.com',
+  },
+  {
+    id: 'f9251c9c-ed30-4c6b-8b3a-affa20',
+    age: 47,
+    name: 'Jane',
+    email: 'jane@test.com',
   }
 ]
 ```
 
 <!--
+Queries and Relationships
 <div style="margin-top: 15px;"></div>
 
 ```Bash
