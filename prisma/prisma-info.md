@@ -1503,14 +1503,16 @@ const user = await prisma.user.findMany({
 
 ### <p style="text-decoration: underline; font-weight: bold;">Keyword Combinations</p>
 
-The keywords of combinations `AND`, `OR`,
-take an `array[]` with the different **queries** chosen.
+- The keywords of combinations `AND`, `OR`,
+  take an `array[]` with the different **queries** chosen.
+
+- If there are no values in the database, an empty `array[]` is returned.
+
+- All queries in the combination keywords must be within an `object{}`
 
 <div style="margin-top: 0px; margin-bottom: 0px;">
 <span style="color: greenYellow; font-weight: 600;">AND</span>
 </div>
-
-- If there are no values in the database, an empty `array[]` is returned.
 
 ```Typescript
 const user = await prisma.user.findMany({
@@ -1528,9 +1530,7 @@ const user = await prisma.user.findMany({
     id: 'f75b15be-97d2-4cd0-b3b2-2c58ab3893e4',
     age: 38,
     name: 'Ben',
-    email: 'bendevweb@test2.com',
-    role: 'BASIC',
-    userPreferenceId: null
+    email: 'bendevweb@test2.com'
   }
 ]
 ```
@@ -1542,9 +1542,9 @@ const user = await prisma.user.findMany({
 ```Typescript
 const user = await prisma.user.findMany({
     where: {
-      AND: [
-        {email: {startsWith: "ben" }},
-        {name: "Ben"},
+      OR: [
+        { email: { startsWith: "ben" } },
+        { age: { gt: 37 } }
       ],
     },
   })
@@ -1556,8 +1556,6 @@ const user = await prisma.user.findMany({
     age: 38,
     name: 'Ben',
     email: 'bendevweb@test2.com',
-    role: 'BASIC',
-    userPreferenceId: null
   }
 ]
 ```
