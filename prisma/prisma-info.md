@@ -1576,8 +1576,103 @@ const user = await prisma.user.findMany({
 ]
 ```
 
+### <p style="text-decoration: underline; font-weight: bold;">Queries and Relationships</p>
+
+---
+
+<div style="margin-top: 0px; margin-bottom: 0px;">
+<span style="color: greenYellow; font-weight: 600;">every</span>
+</div>
+
+- Check where `every` fields contain a query
+
+```Typescript
+const user = await prisma.user.findMany({
+    where: {
+      writtenPosts: {
+        every: {
+          title: "Test",
+        }
+      },
+    },
+  })
+```
+
+In the example below we check that :
+
+- `every` **Post**
+- that contains the property **title**
+- and the value **"Test"**
+
+- #### If **nothing is found** <span style="text-decoration: underline;">all users are returned</span>
+
+<div style="margin-top: 30px;"></div>
+
+<div style="margin-top: 0px; margin-bottom: 0px;">
+<span style="color: greenYellow; font-weight: 600;">none</span>
+</div>
+
+- Check or `none` of the fields contain a query
+
+```Typescript
+const user = await prisma.user.findMany({
+    where: {
+      writtenPosts: {
+        none: {
+          title: "Test",
+        }
+      },
+    },
+  })
+```
+
+- `none` **Post**
+- that contains the property **title**
+- and the value **"Test"**
+
+- #### If **nothing is found** <span style="text-decoration: underline;">all users are returned</span>
+
+<div style="margin-top: 30px;"></div>
+
+<div style="margin-top: 0px; margin-bottom: 0px;">
+<span style="color: greenYellow; font-weight: 600;">some</span>
+</div>
+
+- Check or `some` fields contain a query
+
+```Typescript
+const user = await prisma.user.findMany({
+    where: {
+      writtenPosts: {
+        some: {
+          title: "Test",
+        }
+      },
+    },
+  })
+```
+
+- `some` **Post**
+- that contains the property **title**
+- and the value **"Test"**
+
+- #### If **nothing is found** <span style="text-decoration: underline;">an empty `array[]` is returned</span>
+
+<div style="margin-top: 20px;"></div>
+
+<div style="margin-top: 0px; margin-bottom: 0px;">
+<span style="color: greenYellow; font-weight: 600; font-size: 16px;"> Nesting Queries</span>
+</div>
+
+> All the different queries mentioned can be nested at infinite levels of depth.
+
+<div style="margin-top: 30px;"></div>
+
+### <p style="text-decoration: underline; font-weight: bold;">Relationship filtering</p>
+
+---
+
 <!--
-Queries and Relationships
 <div style="margin-top: 15px;"></div>
 
 ```Bash
