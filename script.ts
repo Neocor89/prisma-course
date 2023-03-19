@@ -8,8 +8,9 @@ async function main() {
 
   const user = await prisma.user.findMany({
     where: {
-      name: "Ben",
-      age: {lt: 38 }
+      NOT: { 
+        email: { startsWith: "cel" } 
+      },
     },
   })
     console.log(user)
