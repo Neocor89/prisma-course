@@ -1443,6 +1443,7 @@ const user = await prisma.user.findMany({
   },
 })
 
+// Returns all results containing "@test2.com" at the end
 ```
 
 - It is possible to be more precise by adding <span style="text-decoration: underline;">additional parameters</span>.
@@ -1452,11 +1453,12 @@ const user = await prisma.user.findMany({
 const user = await prisma.user.findMany({
     where: {
       name: "Ben"
-      email: {contains: "@test2.com" },
+      email: {endsWith: "@test2.com" },
     },
   })
 
-  // Result
+  // Returns all results of those with a name "Ben"
+  // and containing the text "test" at the end of another text
 [
   {
     id: 'b30775fc-a7ff-4125-8907-183a3e',
@@ -1471,7 +1473,7 @@ const user = await prisma.user.findMany({
 <span style="color: greenYellow; font-weight: 600; font-size: 17px;">startWith</span>
 </div>
 
-The `startWith` option allows to check the start of a **text** is
+The `startWith` option allows to check the **start** of a **text** is
 <span style="text-decoration: underline;">contained in another part of a text</span>.
 
 ```Typescript
@@ -1481,6 +1483,83 @@ const user = await prisma.user.findMany({
   },
 })
 
+```
+
+- It is possible to be more precise by adding <span style="text-decoration: underline;">additional parameters</span>.
+- If there are no values in the database, an empty `array[]` is returned.
+
+```Typescript
+const user = await prisma.user.findMany({
+  where: {
+    email: {startWith: "ben" },
+  },
+  age: 37
+})
+
+// Return all results with text start with "ben" and age equal to 37
+```
+
+<div style="margin-top: 25px;"></div>
+
+### <p style="text-decoration: underline; font-weight: bold;">Keyword Combinations</p>
+
+The keywords of combinations `AND`, `OR`,
+take an `array[]` with the different **queries** chosen.
+
+<div style="margin-top: 0px; margin-bottom: 0px;">
+<span style="color: greenYellow; font-weight: 600;">AND</span>
+</div>
+
+- If there are no values in the database, an empty `array[]` is returned.
+
+```Typescript
+const user = await prisma.user.findMany({
+    where: {
+      AND: [
+        { email: { startsWith: "ben" } },
+        { email: { endsWith: "@test2.com"} },
+      ],
+    },
+  })
+
+// Result for Combination
+[
+  {
+    id: 'f75b15be-97d2-4cd0-b3b2-2c58ab3893e4',
+    age: 38,
+    name: 'Ben',
+    email: 'bendevweb@test2.com',
+    role: 'BASIC',
+    userPreferenceId: null
+  }
+]
+```
+
+<div style="margin-top: 0px; margin-bottom: 0px;">
+<span style="color: greenYellow; font-weight: 600;">OR</span>
+</div>
+
+```Typescript
+const user = await prisma.user.findMany({
+    where: {
+      AND: [
+        {email: {startsWith: "ben" }},
+        {name: "Ben"},
+      ],
+    },
+  })
+
+// Results Combination
+[
+  {
+    id: 'f75b15be-97d2-4cd0-b3b2-2c58ab3893e4',
+    age: 38,
+    name: 'Ben',
+    email: 'bendevweb@test2.com',
+    role: 'BASIC',
+    userPreferenceId: null
+  }
+]
 ```
 
 <!--
