@@ -1728,7 +1728,62 @@ const user = await prisma.user.findMany({
 
 - #### If **nothing is found** <span style="text-decoration: underline;">an empty `array[]` is returned</span>
 
-<div style="margin-top: 20px;"></div>
+<div style="margin-top: 25px;"></div>
+
+<div style="margin-top: 0px; margin-bottom: 0px;">
+<span style="color: greenYellow; font-weight: 600;">is</span>
+</div>
+
+<div style="margin-top: 10px;"></div>
+
+- Checks if the condition is **fulfilled**
+- Otherwise returns an empty `array[]`.
+
+```Typescript
+const user = await prisma.post.findMany({
+    where: {
+      author: {
+        is: {
+          age: 37,
+        }
+      },
+    },
+  });
+
+  // Result
+  [
+    {
+    id: 'f75b15be-97d2-4cd0-b3b2-2c58ab',
+    age: 37,
+    name: 'Ben',
+    email: 'bendevweb@test2.com',
+  }
+  ]
+```
+
+<div style="margin-top: 0px; margin-bottom: 0px;">
+<span style="color: greenYellow; font-weight: 600;">is</span>
+</div>
+
+<div style="margin-top: 10px;"></div>
+
+- Checks if the condition is **fulfilled**
+- Otherwise returns an empty `array[]`.
+
+```Typescript
+const user = await prisma.post.findMany({
+    where: {
+      author: {
+        isNot: {
+          age: 37,
+        }
+      },
+    },
+  });
+
+  // Result
+  []
+```
 
 <div style="margin-top: 0px; margin-bottom: 0px;">
 <span style="color: greenYellow; font-weight: 600; font-size: 16px;"> Nesting Queries</span>
@@ -1736,17 +1791,72 @@ const user = await prisma.user.findMany({
 
 > All the different queries mentioned can be nested at infinite levels of depth.
 
+<!-- <div style="margin-top: 30px;"></div> -->
+
 <div style="margin-top: 30px;"></div>
 
-### <p style="text-decoration: underline; font-weight: bold;">Relationship filtering</p>
+### [Updating Data](#updating-data)
+
+To update data with Prisma,
+it is possible to use either the `Upadate` or `UpdateMany` function.
+
+```Typescript
+// Update first User
+const user = await prisma.user.update({})
+
+// Update all Users
+const user = await prisma.user.updateMany({})
+```
+
+```Typescript
+const user = await prisma.user.update({
+  //1. What to change
+    where: {
+      email: "mat@test2.com",
+    },
+
+    //2. Changes
+    data: {
+      email: "mateo@test2.com"
+    }
+  });
+
+// Result
+{
+  id: 'b30775fc-a7ff-4125-8907-183a3e',
+  age: 38,
+  name: 'Matèo',
+  email: 'mateo@test2.com',
+}
+```
+
+- It is possible to add<span style="text-decoration: underline;">additional parameters like :</span>
+
+- `Include`
+
+- `Select`
 
 ---
 
-<div style="margin-top: 30px;"></div>
-
-<div style="margin-top: 0px; margin-bottom: 0px;">
-<span style="color: greenYellow; font-weight: 600;">is</span>
-</div>
+```Typescript
+// Ordered by age ascending
+// Where email contains prisma.io
+// Limited to the 10 users
+const aggregations = await prisma.user.aggregate({
+  _avg: {
+    age: true,
+  },
+  where: {
+    email: {
+      contains: "prisma.io",
+    },
+  },
+  orderBy: {
+    age: "asc",
+  },
+  take: 10,
+})
+```
 
 <!--
 <div style="margin-top: 15px;"></div>
@@ -1756,6 +1866,58 @@ npm install --save-dev prisma typescript ts-node @types/node nodemon
 npx prisma init --datasource-provider mysql
 npx prisma migrate dev --name init
 ```
+
+
+[
+  {
+    id: '5c641e9f-4c9c-40ce-940a-26a7ac42529d',
+    age: 48,
+    name: 'Céline',
+    email: 'celine@test2.com',
+    role: 'BASIC',
+    userPreferenceId: null
+  },
+  {
+    id: 'adf18ca4-a642-4f85-96ec-fab3e3a6e84d',
+    age: 7,
+    name: 'Matèo',
+    email: 'mateo@test.com',
+    role: 'BASIC',
+    userPreferenceId: null
+  },
+  {
+    id: 'b30775fc-a7ff-4125-8907-183a3e7bf3d2',
+    age: 8,
+    name: 'Matèo',
+    email: 'mat@test2.com',
+    role: 'BASIC',
+    userPreferenceId: null
+  },
+  {
+    id: 'e08fe917-47d6-481f-b176-9b01f04ce5a7',
+    age: 37,
+    name: 'Ben',
+    email: 'bendevweb@test.com',
+    role: 'BASIC',
+    userPreferenceId: null
+  },
+  {
+    id: 'f75b15be-97d2-4cd0-b3b2-2c58ab3893e4',
+    age: 38,
+    name: 'Ben',
+    email: 'bendevweb@test2.com',
+    role: 'BASIC',
+    userPreferenceId: null
+  },
+  {
+    id: 'f9251c9c-ed30-4c6b-8b3a-affa20198cdd',
+    age: 47,
+    name: 'Céline',
+    email: 'celine@test.com',
+    role: 'BASIC',
+    userPreferenceId: null
+  }
+]
 
 : Open the "prisma/schema.prisma" file in a text editor and edit the "datasource" section to include your MySQL database connection information. Here is an example of the configuration:
 : For validation command
