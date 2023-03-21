@@ -676,7 +676,7 @@ const user = await prisma.user.create({
 
 > It is only possible to make one `selection` or `inclusion` at a time.
 
-<p style="text-decoration: underline; font-weight: bold;">Impossible to do both at the same time</p>
+<p style="text-decoration: underline;">Impossible to do both at the same time</p>
 
 **log**
 Allows to record new requests and to have a log of our current requests and display all the execution process.
@@ -758,6 +758,70 @@ Prisma sends us through the terminal the number of users created
 
 ```JSON
 { count: 3 }
+```
+
+<div style="margin-top: 20px;"></div>
+
+#### **Creating sub-data sets**
+
+<div style="margin-top: 15px;"></div>
+
+<span style="color: greenYellow; font-weight: 600;">create</span>
+
+- Allows to create linked data between two models it is necessary to use the `Create` keyword
+
+<div style="margin-top: 10px;"></div>
+
+```Typescript
+const user = await prisma.post.create({
+    data: {
+      title: "Prisma Crash Course",
+      averageRating: 4.4,
+      authorId: "e08fe917-47d6-481f-b176-9b01f0",
+      // Category Model
+      categories : {
+        // Create subsets of data
+        create: [
+          {name: "Database"},
+          {name: "Web Development"},
+        ]
+      }
+    }
+  })
+
+  // Result
+  {
+  id: 'e72b56a9-f857-4add-b007-c8c74c',
+  title: 'Prisma Crash Course',
+  averageRating: 4.4,
+  createdAt: 2023-03-21T18:40:21.149Z,
+  updatedAt: 2023-03-21T18:40:21.149Z,
+  authorId: 'e08fe917-47d6-481f-b176-9b01f0',
+}
+```
+
+<span style="color: greenYellow; font-weight: 600;">connect</span>
+
+- Allows to connect data between two models using the keyword `Connect`
+
+<div style="margin-top: 10px;"></div>
+
+```Typescript
+const user = await prisma.post.create({
+    data: {
+      title: "Prisma Crash Course",
+      averageRating: 4.4,
+      authorId: "e08fe917-47d6-481f-b176-9b01f0",
+      // Category Model
+      categories : {
+        // Connect data
+        connect: [
+          {name: "Database"},
+          {name: "Web Development"},
+        ]
+      }
+    }
+  })
 ```
 
 <div style="margin-top: 30px;"></div>
@@ -1576,9 +1640,15 @@ const user = await prisma.user.findMany({
 ]
 ```
 
-### <p style="text-decoration: underline; font-weight: bold;">Queries and Relationships</p>
+<div style="margin-top: 30px;"></div>
+
+### [<p style="text-decoration: underline; font-weight: bold; color: white;">Relationship filtering</p>](#relationship-filtering)
 
 ---
+
+<div style="margin-top: 15px;"></div>
+
+#### <p style="font-weight: bold;">Queries and Relationships</p>
 
 <div style="margin-top: 0px; margin-bottom: 0px;">
 <span style="color: greenYellow; font-weight: 600;">every</span>
@@ -1671,6 +1741,12 @@ const user = await prisma.user.findMany({
 ### <p style="text-decoration: underline; font-weight: bold;">Relationship filtering</p>
 
 ---
+
+<div style="margin-top: 30px;"></div>
+
+<div style="margin-top: 0px; margin-bottom: 0px;">
+<span style="color: greenYellow; font-weight: 600;">is</span>
+</div>
 
 <!--
 <div style="margin-top: 15px;"></div>
