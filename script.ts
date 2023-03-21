@@ -6,14 +6,14 @@ async function main() {
 
   // await prisma.user.deleteMany();
 
-  const user = await prisma.user.findMany({
+  const user = await prisma.post.findMany({
     where: {
-      writtenPosts: {
-        every: {
-          title: "Test",
+      author : {
+        is: {
+          name: "Ben"
         }
-      },
-    },
+      }
+    }
   })
     console.log(user)
 }
